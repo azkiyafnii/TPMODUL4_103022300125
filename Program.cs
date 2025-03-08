@@ -1,49 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+using System;
 
-class KodePos
+enum DoorState
 {
-    // Dictionary untuk menyimpan daftar kelurahan dan kode posnya
-    private static Dictionary<string, string> daftarKodePos = new Dictionary<string, string>
-    {
-        {"Batununggal", "40266"},
-        {"Kujangsari", "40287"},
-        {"Mengger", "40267"},
-        {"Wates", "40256"},
-        {"Cijaura", "40287"},
-        {"Jatisari", "40286"},
-        {"Margasari", "40286"},
-        {"Sekejati", "40286"},
-        {"Kebonwaru", "40272"},
-        {"Maleer", "40274"},
-        {"Samoja", "40273"}
-    };
+    Terkunci,
+    Terbuka
+}
 
-    // Method untuk mendapatkan kode pos berdasarkan nama kelurahan
-    public static string GetKodePos(string kelurahan)
+class DoorMachine
+{
+    private DoorState state;
+
+    // Konstruktor, state awal = Terkunci
+    public DoorMachine()
     {
-        // Mengecek apakah kelurahan ada dalam dictionary
-        if (daftarKodePos.ContainsKey(kelurahan))
+        state = DoorState.Terkunci;
+        Console.WriteLine("Pintu terkunci");
+    }
+
+    // Method untuk membuka pintu
+    public void BukaPintu()
+    {
+        if (state == DoorState.Terkunci)
         {
-            return daftarKodePos[kelurahan]; // Mengembalikan kode pos jika ditemukan
+            Console.WriteLine("Tidak bisa membuka, pintu masih terkunci!");
         }
         else
         {
-            return "Kode pos tidak ditemukan"; // Mengembalikan pesan jika tidak ditemukan
+            Console.WriteLine("Pintu sudah terbuka");
         }
     }
-}
 
-class Program
-{
-    static void Main()
+    // Method untuk mengunci pintu
+    public void KunciPintu()
     {
-        Console.Write("Masukkan nama kelurahan: ");
-        string inputKelurahan = Console.ReadLine(); // Membaca input dari user
+        if (state == DoorState.Terkunci)
+        {
+            Console.WriteLine("Pintu sudah terkunci");
+        }
+        else
+        {
+            state = DoorState.Terkunci;
+            Console.WriteLine("Pintu terkunci");
+        }
+    }
 
-        // Memanggil method GetKodePos untuk mencari kode pos
-        string kodePos = KodePos.GetKodePos(inputKelurahan);
+    // Method untuk membuka kunci pintu
+    public void BukaKunci()
+    {
+        if (state == DoorState.Terbuka)
+        {
+            Console.WriteLine("Pintu sudah tidak terkunci");
+        }
+        else
+        {
+            state = DoorState.Terbuka;
+            Console.WriteLine("Pintu tidak terkunci");
+        }
+    }
 
-        Console.WriteLine($"Kode pos untuk {inputKelurahan}: {kodePos}"); // Menampilkan hasil pencarian
+    // Method utama untuk menjalankan simulasi
+    static void Main(string[] args)
+    {
+        DoorMachine pintu = new DoorMachine();
+
+        // Simulasi perubahan state
+        pintu.BukaPintu();  // Tidak bisa buka, masih terkunci
+        pintu.BukaKunci();  // Membuka kunci pintu
+        pintu.BukaPintu();  // Pintu terbuka
+        pintu.KunciPintu(); // Mengunci kembali pintu
     }
 }
